@@ -80,7 +80,7 @@ public class CustomListAdapter extends BaseAdapter {
         final BasicParameters bP=bpItems.get(position);
         holder.number.setText(bP.getNumber());
         holder.page.setText("This is page:"+ " "+bP.getPage());
-        holder.count.setText("Total item count"+" "+bP.getTotalItemCount());
+        holder.count.setText("Cached item count"+" "+bP.getTotalItemCount());
         holder.image.setImageUrl(bP.getUrl(), imageLoader);
 
 

@@ -21,12 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-      ListView list;
-    int[] numbers=new int [10];
+    ListView list;
     CustomListAdapter listAdapter;
-    List<BasicParameters> bpItems=new ArrayList<>();
-    public static String BASIC_REQUEST_URL = "https://pagegeneratorapi.herokuapp.com/api?page=";
-    public static int scrollFlag = 0;
+    List<BasicParameters> bpItems = new ArrayList<>();
+    String BASIC_REQUEST_URL = "https://pagegeneratorapi.herokuapp.com/api?page=";
+    public int scrollFlag = 0;
     public int mTotalItemCount;
     public int mScrollState;
     boolean scrollingDown = true;
@@ -35,21 +34,23 @@ public class MainActivity extends AppCompatActivity {
     public int pageDown = 0;
     public int pageUp = 0;
     String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        list=(ListView)findViewById(R.id.list);
-        list.setFriction(ViewConfiguration.getScrollFriction()*100);
-        listAdapter=new CustomListAdapter(this,bpItems);
+        list = (ListView) findViewById(R.id.list);
+        list.setFriction(ViewConfiguration.getScrollFriction() * 100);
+        listAdapter = new CustomListAdapter(this, bpItems);
         list.setAdapter(listAdapter);
-        fetchData(BASIC_REQUEST_URL+String.valueOf(0));
+        fetchData(BASIC_REQUEST_URL + String.valueOf(0));
 
         list.setOnScrollListener(new AbsListView.OnScrollListener() {
 
             private int mLastFirstVisibleItem;
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 mScrollState = scrollState;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 if (scrollFlag == 0 && scrollingDown && totalItemCount != 0 && (totalItemCount - firstVisibleItem) <= startItem && totalItemCount % 10 == 0) {
                     pageDown++;
 
-                    url = BASIC_REQUEST_URL  + String.valueOf(pageDown);
+                    url = BASIC_REQUEST_URL + String.valueOf(pageDown);
                     fetchData(url);
 
                     scrollFlag = 1;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 if (scrollFlag == 0 && scrollingUp && totalItemCount != 0 && firstVisibleItem <= 3 && pageUp > 0) {
 
                     pageUp--;
-                    url = BASIC_REQUEST_URL +  String.valueOf(pageUp);
+                    url = BASIC_REQUEST_URL + String.valueOf(pageUp);
                     fetchData(url);
                     scrollFlag = 1;
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public int fetchData(String url) {
-        final String page=url.substring(48);
+        final String page = url.substring(48);
         StringRequest getRequest = new StringRequest(Request.Method.GET,
                 url,
                 new Response.Listener<String>() {
@@ -115,14 +116,14 @@ public class MainActivity extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
 
                                 BasicParameters basicParameters = new BasicParameters();
-                               String number =jsonArray.getString(i);
+                                String number = jsonArray.getString(i);
                                 basicParameters.setNumber(number);
-                                String url="https://unsplash.it/200/300/?image=" + String.valueOf(i*(Integer.parseInt(page)+1));
+                                String url = "https://unsplash.it/200/300/?image=" + String.valueOf(i * (Integer.parseInt(page) + 1));
                                 basicParameters.setUrl(url);
-                                basicParameters.setPage(String.valueOf((Integer.parseInt(page)+1)));
-                                if (mTotalItemCount<30){
-                                basicParameters.setTotalItemCount(mTotalItemCount+10);
-                                }else basicParameters.setTotalItemCount(mTotalItemCount);
+                                basicParameters.setPage(String.valueOf((Integer.parseInt(page) + 1)));
+                                if (mTotalItemCount < 30) {
+                                    basicParameters.setTotalItemCount(mTotalItemCount + 10);
+                                } else basicParameters.setTotalItemCount(mTotalItemCount);
 
                                 if (scrollingDown) {
 
